@@ -1,4 +1,4 @@
-# Blender Rigging Toolkit
+# Rigging Toolkit for Blender 4.1
 
 **General Description**
 
