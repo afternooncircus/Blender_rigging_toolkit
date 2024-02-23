@@ -18,7 +18,7 @@ bl_info = {
     "version": (0, 0),
     "blender": (4, 0, 2),
     "location": "3D View > Rigging Toolkit",
-    "warning": "In Development", # used for warning icon and text in addons panel
+    "warning": "In Development",  # used for warning icon and text in addons panel
     "doc_url": "https://github.com/afternooncircus/Blender_rigging_toolkit",
     "tracker_url": "",
     "support": "COMMUNITY",
@@ -27,6 +27,7 @@ bl_info = {
 
 from .ui import register_ui, unregister_ui
 from .operators import register_operators, unregister_operators
+
 
 def register() -> None:
     register_ui()

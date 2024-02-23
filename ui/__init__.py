@@ -13,6 +13,7 @@ def register_ui() -> None:
     for cls in classes:
         register_class(cls)
 
+
 def unregister_ui() -> None:
     for cls in reversed(classes):
         unregister_class(cls)

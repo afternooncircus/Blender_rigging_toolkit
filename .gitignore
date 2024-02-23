@@ -1,2 +1,4 @@
 __pycache__
 *.pyc
+ui/__pycache__/ui_custom_properties.cpython-310.pyc
+ui/__pycache__/__init__.cpython-310.pyc
