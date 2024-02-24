@@ -1,11 +1,14 @@
 from bpy.utils import register_class, unregister_class
 
-from .ui_custom_properties import VIEW3D_PT_ArmatureNameUI, VIEW3D_PT_BonePropertiesUI
-
+from . import ui_custom_properties as ac_custom_prop_ui
 
 classes: list = [
-    VIEW3D_PT_ArmatureNameUI,
-    VIEW3D_PT_BonePropertiesUI,
+    ac_custom_prop_ui.VIEW3D_PT_CustomBonePropertiesUI,
+    ac_custom_prop_ui.VIEW3D_PT_CharacterSettingsUI,
+    ac_custom_prop_ui.VIEW3D_PT_IkFkSwitchUI,
+    ac_custom_prop_ui.VIEW3D_PT_FkHingeUI,
+    ac_custom_prop_ui.VIEW3D_PT_BonesMaskPropUI,
+    ac_custom_prop_ui.VIEW3D_PT_LimbsSettingsUI,
 ]
 
 
