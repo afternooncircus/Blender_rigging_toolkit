@@ -12,4 +12,4 @@ These are a collection of rigging tools for my own workflow in Blender 4.1.
 - [ ] Preset of bone widgets.
 - [ ] Rig preset creation.
 - [ ] UI for rig collections.
-- [ ] UI for bone custom properties.
+- [x] UI for bone custom properties.
