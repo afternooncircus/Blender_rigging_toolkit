@@ -113,7 +113,7 @@ class CustomPropertiesAccess():
         self.suffix = suffix
 
     def __str__(self) -> None:
-        return f"{self.prop_name}, {self.source_bone}, {self.default}, {self.suffix}"
+        return f"Property Name: {self.prop_name}, Source Bone: {self.source_bone}, Default: {self.default}, Suffix: {self.suffix}"
 
     @property
     def prop_name(self):
