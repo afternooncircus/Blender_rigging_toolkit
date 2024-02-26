@@ -7,7 +7,7 @@ def main()-> None:
     ''' Stores all the custom properties that would get call. '''
 
     foot_roll = CustomPropertiesAccess(prop_name="Foot Roll", source_bone="Properties", default=1.0, suffix=".L")
-    arm_fk_hinge = CustomPropertiesAccess(prop_name="arm-FK_hinge", source_bone="Properties", default=1.0, suffix=".L")
+    arm_fk_hinge = CustomPropertiesAccess(prop_name="arm-FK_hinge", source_bone="Properties", default=1.0, suffix=".R")
     leg_fk_hinge = CustomPropertiesAccess(prop_name="leg-FK_hinge", source_bone="Properties", default=1.0, suffix=".L")
     arm_ik_pole_follow = CustomPropertiesAccess(prop_name="arm-IK_pole_follow", source_bone="Properties", default=1.0, suffix=".L")
     leg_ik_pole_follow = CustomPropertiesAccess(prop_name="leg-IK_pole_follow", source_bone="Properties", default=1.0, suffix=".L")
@@ -71,20 +71,22 @@ def make_dict_pairs(nameprop: str, default: str | float | int | bool, source_bon
 
 
 def is_suffix_in_custom_prop(prop_name: str, suffix_side: str | None):
-    """Return name plus suffix if it has some."""
+    """Return custom property name.suffix if it has some."""
 
     if suffix_side == None:
         return prop_name
 
-    elif suffix_side == ".L":
-        left_side = f"{prop_name}{suffix_side}"
-        right_side = f"{prop_name}.R"
-        return left_side, right_side
+    elif suffix_side == ".L" or suffix_side == ".R":
+        opposite_side = ".R" if suffix_side == ".L" else ".L"
+        original_side = f"{prop_name}{suffix_side}"
+        opposite_side = f"{prop_name}{opposite_side}" 
+        return original_side, opposite_side
 
-    elif suffix_side == ".top":
-        top_side = f"{prop_name}{suffix_side}"
-        bot_side = f"{prop_name}.bot"
-        return top_side, bot_side
+    elif suffix_side == ".top" or suffix_side == "bot":
+        opposite_side = ".bot" if suffix_side == ".top" else ".bot"
+        original_side = f"{prop_name}{suffix_side}"
+        opposite_side = f"{prop_name}{opposite_side}" 
+        return original_side, opposite_side
 
     elif suffix_side == ".C":
         return f"{prop_name}{suffix_side}"
