@@ -6,7 +6,7 @@ import rna_prop_ui
 def main()-> None:
     ''' Stores all the custom properties that would get call. '''
 
-    foot_roll = CustomPropertiesAccess(prop_name="Foot Roll", source_bone="Properties", default=1.0, suffix=".L")
+    foot_roll = CustomPropertiesAccess(prop_name='Foot Roll', source_bone='Properties', default=1.0, suffix=".L")
     arm_fk_hinge = CustomPropertiesAccess(prop_name="arm-FK_hinge", source_bone="Properties", default=1.0, suffix=".R")
     leg_fk_hinge = CustomPropertiesAccess(prop_name="leg-FK_hinge", source_bone="Properties", default=1.0, suffix=".L")
     arm_ik_pole_follow = CustomPropertiesAccess(prop_name="arm-IK_pole_follow", source_bone="Properties", default=1.0, suffix=".L")
@@ -19,8 +19,8 @@ def main()-> None:
     leg_rubber_hose = CustomPropertiesAccess(prop_name="leg-rubber_hose", source_bone="Properties", default=1.0, suffix=".L")
     arm_mask = CustomPropertiesAccess(prop_name="arm-mask", source_bone="Properties", default=False, suffix=".L")
     leg_mask = CustomPropertiesAccess(prop_name="leg-mask", source_bone="Properties", default=False, suffix=".L")
-    
 
+    
     all_props = {foot_roll, arm_fk_hinge, leg_fk_hinge, arm_ik_pole_follow, arm_ik_pole_follow, leg_ik_pole_follow, arm_ik_stretch, leg_ik_stretch, 
                 arm_ik_fk_switch, leg_ik_fk_switch, arm_rubber_hose, leg_rubber_hose, arm_mask, leg_mask}
     
@@ -114,6 +114,36 @@ class CustomPropertiesAccess():
 
     def __str__(self) -> None:
         return f"{self.prop_name}, {self.source_bone}, {self.default}, {self.suffix}"
+
+    @property
+    def prop_name(self):
+        return self._prop_name
+    
+    @prop_name.setter
+    def prop_name(self, prop_name):
+        if not isinstance(prop_name, str):
+            raise ValueError(f"Property Name: '{prop_name}' was not given or valid. Expects 'str' type not {type(prop_name)}")
+        self._prop_name = prop_name
+
+    @property
+    def source_bone(self):
+        return self._source_bone
+    
+    @source_bone.setter
+    def source_bone(self, source_bone):
+        if not isinstance(source_bone, str):
+            raise ValueError(f"Source bone Paramater: '{source_bone}' was not given or valid. Expects 'str' type, not {type(source_bone)}")
+        self._source_bone = source_bone
+
+    @property
+    def default(self):
+        return self._default
+    
+    @default.setter
+    def default(self, default):
+        if default == None:
+            raise ValueError(f"Default Paramater: '{default}' was not given or valid. Expected 'str', 'int', 'float', or 'bool' types, not {type(default)}")
+        self._default = default
 
 
 class AC_OT_add_CustomProp(Operator):
