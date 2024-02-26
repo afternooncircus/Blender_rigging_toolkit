@@ -50,6 +50,7 @@ class ArmaturePanel(Panel):
             return context.active_object.type == "ARMATURE"
         return False
 
+
     @staticmethod
     def is_bone(bone_name: str, context: Context) -> bool:
         """Check if bone exists in armature object.
@@ -157,6 +158,7 @@ class ArmaturePanel(Panel):
             )
 
 
+
 # ----- Main Panel -----
 class VIEW3D_PT_CustomBonePropertiesUI(ArmaturePanel, Panel):
     """Draws main UI tab for all properties under the label 'Custom Properties Settings'."""
@@ -167,12 +169,12 @@ class VIEW3D_PT_CustomBonePropertiesUI(ArmaturePanel, Panel):
 
     @classmethod
     def poll(cls, context: Context) -> bool:
-        return super().poll(context) and super().is_bone(cls.ac_custom_bone, context)
+        return super().poll(context)
 
     def draw(self, context: Context):
         layout = self.layout
         layout.label(
-            text=f"{context.active_object.data.name} | {self.ac_custom_bone}",
+            text=f"{context.active_object.data.name}",
             icon="ARMATURE_DATA",
         )
 
@@ -768,12 +770,12 @@ class VIEW3D_PT_CharacterSettingsUI(ArmaturePanel, Panel):
 
     @classmethod
     def poll(cls, context: Context) -> bool:
-        return super().poll(context) and super().is_bone(cls.ac_custom_bone, context)
+        return super().poll(context)
 
     def draw(self, context: Context):
         layout = self.layout
         layout.label(
-            text=f"{context.active_object.name} | {self.ac_custom_bone}",
+            text=f"{context.active_object.name}",
             icon="OUTLINER_OB_ARMATURE",
         )
 

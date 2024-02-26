@@ -36,4 +36,4 @@ def register() -> None:
 
 def unregister() -> None:
     unregister_ui()
-    unregister_operators
+    unregister_operators()

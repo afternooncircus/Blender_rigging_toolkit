@@ -5,7 +5,11 @@ import rna_prop_ui
 
 def main()-> None:
     ''' Stores all the custom properties that would get call. '''
-
+    
+    #---------- Custom Property Settings ----------
+    mouth_zipper = CustomPropertiesAccess(prop_name='mouth-zipper', source_bone='Properties', default=1.0)
+    teeth_follow_rot = CustomPropertiesAccess(prop_name='teeth-follow_rot', source_bone='Properties', default=1.0)
+    eyes_sticky_eyelips = CustomPropertiesAccess(prop_name='eyes-sticky_eyelips', source_bone='Properties', default=1.0)
     foot_roll = CustomPropertiesAccess(prop_name='Foot Roll', source_bone='Properties', default=1.0, suffix=".L")
     arm_fk_hinge = CustomPropertiesAccess(prop_name="arm-FK_hinge", source_bone="Properties", default=1.0, suffix=".R")
     leg_fk_hinge = CustomPropertiesAccess(prop_name="leg-FK_hinge", source_bone="Properties", default=1.0, suffix=".L")
@@ -13,16 +17,18 @@ def main()-> None:
     leg_ik_pole_follow = CustomPropertiesAccess(prop_name="leg-IK_pole_follow", source_bone="Properties", default=1.0, suffix=".L")
     arm_ik_stretch = CustomPropertiesAccess(prop_name="arm-IK_stretch", source_bone="Properties", default=1.0, suffix=".L")
     leg_ik_stretch = CustomPropertiesAccess(prop_name="leg-IK_stretch", source_bone="Properties", default=1.0, suffix=".L")
-    arm_ik_fk_switch = CustomPropertiesAccess(prop_name="arm-IK|FK_switch", source_bone="Properties", default=1.0, suffix=".L")
-    leg_ik_fk_switch = CustomPropertiesAccess(prop_name="leg-IK|FK_switch", source_bone="Properties", default=1.0, suffix=".L")
+    arm_ik_fk_switch = CustomPropertiesAccess(prop_name="arm-IK|FK", source_bone="Properties", default=1.0, suffix=".L")
+    leg_ik_fk_switch = CustomPropertiesAccess(prop_name="leg-IK|FK", source_bone="Properties", default=1.0, suffix=".L")
     arm_rubber_hose = CustomPropertiesAccess(prop_name="arm-rubber_hose", source_bone="Properties", default=1.0, suffix=".L")
     leg_rubber_hose = CustomPropertiesAccess(prop_name="leg-rubber_hose", source_bone="Properties", default=1.0, suffix=".L")
+    
+    #---------- Character Settings ----------
     arm_mask = CustomPropertiesAccess(prop_name="arm-mask", source_bone="Properties", default=False, suffix=".L")
     leg_mask = CustomPropertiesAccess(prop_name="leg-mask", source_bone="Properties", default=False, suffix=".L")
 
     
     all_props = {foot_roll, arm_fk_hinge, leg_fk_hinge, arm_ik_pole_follow, arm_ik_pole_follow, leg_ik_pole_follow, arm_ik_stretch, leg_ik_stretch, 
-                arm_ik_fk_switch, leg_ik_fk_switch, arm_rubber_hose, leg_rubber_hose, arm_mask, leg_mask}
+                arm_ik_fk_switch, leg_ik_fk_switch, arm_rubber_hose, leg_rubber_hose, arm_mask, leg_mask, mouth_zipper, teeth_follow_rot, eyes_sticky_eyelips}
     
     properties_to_ui(all_props)
 
@@ -55,7 +61,7 @@ def buffer_custom_prop(source_bone: str, buffer_dict: dict) -> dict:
 def make_dict_pairs(nameprop: str, default: str | float | int | bool, source_bone: str, suffix: str | None = None,) -> dict:
     """If suffix is given returns a pair of prop L, R or top,bot or returns a single value if suffix is not given."""
     
-    assert is_bone(source_bone), f"{source_bone} not in current Armature."
+    assert is_bone(source_bone), f"'{source_bone}' bone not in active Armature."
     
     full_name = is_suffix_in_custom_prop(
         prop_name=nameprop, suffix_side=suffix)
@@ -121,7 +127,7 @@ class CustomPropertiesAccess():
     
     @prop_name.setter
     def prop_name(self, prop_name):
-        if not isinstance(prop_name, str):
+        if not isinstance(prop_name, str) or not prop_name:
             raise ValueError(f"Property Name: '{prop_name}' was not given or valid. Expects 'str' type not {type(prop_name)}")
         self._prop_name = prop_name
 
@@ -131,7 +137,7 @@ class CustomPropertiesAccess():
     
     @source_bone.setter
     def source_bone(self, source_bone):
-        if not isinstance(source_bone, str):
+        if not isinstance(source_bone, str) or not source_bone:
             raise ValueError(f"Source bone Paramater: '{source_bone}' was not given or valid. Expects 'str' type, not {type(source_bone)}")
         self._source_bone = source_bone
 
@@ -156,7 +162,7 @@ class AC_OT_add_CustomProp(Operator):
     @classmethod
     def poll(cls, context: Context) -> bool:
         return (
-            context.active_object.type == "ARMATURE" and context.area.type == "VIEW_3D"
+            context.active_object.type == "ARMATURE" and context.area.type == "VIEW_3D" and context.mode == 'POSE'
         )
 
     def execute(self, context):
