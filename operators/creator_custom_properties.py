@@ -4,22 +4,25 @@ import rna_prop_ui
 
 
 def main()-> None:
-    ''' Stores all the custom properties that would get call. '''
-    
+    properties_to_ui(all_custom_properties())
+
+def all_custom_properties() -> dict:
+    """ Stores all the custom properties that would get call. """
+
     #---------- Custom Property Settings ----------
     mouth_zipper = CustomPropertiesAccess(prop_name='mouth-zipper', source_bone='Properties', default=1.0)
     teeth_follow_rot = CustomPropertiesAccess(prop_name='teeth-follow_rot', source_bone='Properties', default=1.0)
     eyes_sticky_eyelips = CustomPropertiesAccess(prop_name='eyes-sticky_eyelips', source_bone='Properties', default=1.0)
-    foot_roll = CustomPropertiesAccess(prop_name='Foot Roll', source_bone='Properties', default=1.0, suffix=".L")
+    foot_roll = CustomPropertiesAccess(prop_name='Foot Roll', source_bone='Properties', default=1.0, suffix=".top")
     arm_fk_hinge = CustomPropertiesAccess(prop_name="arm-FK_hinge", source_bone="Properties", default=1.0, suffix=".R")
     leg_fk_hinge = CustomPropertiesAccess(prop_name="leg-FK_hinge", source_bone="Properties", default=1.0, suffix=".L")
     arm_ik_pole_follow = CustomPropertiesAccess(prop_name="arm-IK_pole_follow", source_bone="Properties", default=1.0, suffix=".L")
     leg_ik_pole_follow = CustomPropertiesAccess(prop_name="leg-IK_pole_follow", source_bone="Properties", default=1.0, suffix=".L")
-    arm_ik_stretch = CustomPropertiesAccess(prop_name="arm-IK_stretch", source_bone="Properties", default=1.0, suffix=".L")
+    arm_ik_stretch = CustomPropertiesAccess(prop_name="arm-IK_stretch", source_bone="Propiedades", default=1.0, suffix=".L")
     leg_ik_stretch = CustomPropertiesAccess(prop_name="leg-IK_stretch", source_bone="Properties", default=1.0, suffix=".L")
     arm_ik_fk_switch = CustomPropertiesAccess(prop_name="arm-IK|FK", source_bone="Properties", default=1.0, suffix=".L")
     leg_ik_fk_switch = CustomPropertiesAccess(prop_name="leg-IK|FK", source_bone="Properties", default=1.0, suffix=".L")
-    arm_rubber_hose = CustomPropertiesAccess(prop_name="arm-rubber_hose", source_bone="Properties", default=1.0, suffix=".L")
+    arm_rubber_hose = CustomPropertiesAccess(prop_name="arm-rubber_hose", source_bone="Propiedades", default=1.0, suffix=".L")
     leg_rubber_hose = CustomPropertiesAccess(prop_name="leg-rubber_hose", source_bone="Properties", default=1.0, suffix=".L")
     
     #---------- Character Settings ----------
@@ -30,8 +33,7 @@ def main()-> None:
     all_props = {foot_roll, arm_fk_hinge, leg_fk_hinge, arm_ik_pole_follow, arm_ik_pole_follow, leg_ik_pole_follow, arm_ik_stretch, leg_ik_stretch, 
                 arm_ik_fk_switch, leg_ik_fk_switch, arm_rubber_hose, leg_rubber_hose, arm_mask, leg_mask, mouth_zipper, teeth_follow_rot, eyes_sticky_eyelips}
     
-    properties_to_ui(all_props)
-
+    return all_props
 
 def properties_to_ui(all_custom_props: set) -> None:
     for custom_property in all_custom_props:
@@ -157,14 +159,12 @@ class AC_OT_add_CustomProp(Operator):
 
     bl_idname = "ac.set_bone_custom_properties"
     bl_label = "Bone Custom Property Settings"
-    bl_options = {"REGISTER", "PRESET"}
+    bl_options = {'REGISTER'}
 
     @classmethod
     def poll(cls, context: Context) -> bool:
-        return (
-            context.active_object.type == "ARMATURE" and context.area.type == "VIEW_3D" and context.mode == 'POSE'
-        )
-
+        return context.active_object.type == "ARMATURE" and context.mode == 'POSE' and context.area.type == 'VIEW_3D'
+        
     def execute(self, context):
         main()
         return {"FINISHED"}

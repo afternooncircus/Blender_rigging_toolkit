@@ -13,5 +13,5 @@ def register_operators() -> None:
 
 
 def unregister_operators() -> None:
-    for cls in reversed(classes):
+    for cls in classes:
         unregister_class(cls)
