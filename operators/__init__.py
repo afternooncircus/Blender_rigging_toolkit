@@ -1,9 +1,12 @@
 from bpy.utils import register_class, unregister_class
-from . import creator_custom_properties
+from . import op_custom_properties
+from . import drivers_in_custom_properties
+from . import op_armature_settings
 
 
 classes: list = [
-    creator_custom_properties.AC_OT_add_CustomProp,
+    op_custom_properties.AC_OT_add_CustomProp,
+    op_armature_settings.AC_OT_Set_ArmatureProp,
 ]
 
 

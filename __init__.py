@@ -25,7 +25,7 @@ bl_info = {
     "category": "Rigging",
 }
 
-from .ui import register_ui, unregister_ui
+from .user_interface import register_ui, unregister_ui
 from .operators import register_operators, unregister_operators
 
 

@@ -50,7 +50,6 @@ class ArmaturePanel(Panel):
             return context.active_object.type == "ARMATURE"
         return False
 
-
     @staticmethod
     def is_bone(bone_name: str, context: Context) -> bool:
         """Check if bone exists in armature object.
@@ -157,7 +156,7 @@ class ArmaturePanel(Panel):
                 text=text,
             )
 
-
+    
 
 # ----- Main Panel -----
 class VIEW3D_PT_CustomBonePropertiesUI(ArmaturePanel, Panel):
@@ -196,7 +195,7 @@ class VIEW3D_PT_IkFkSwitchUI(ArmaturePanel, Panel):
         )
 
     def draw(self, context: Context):
-        if self.is_custom_suffix(self.ac_custom_bone, context, self.ac_foot_roll):
+        if self.is_custom_suffix(self.ac_custom_bone, context, self.ac_ikfk_bone):
             layout = self.layout
 
             # New split of pair columns
@@ -261,7 +260,7 @@ class VIEW3D_PT_FkHingeUI(ArmaturePanel, Panel):
         )
 
     def draw(self, context: Context):
-        if self.is_custom_suffix(self.ac_custom_bone, context, self.ac_foot_roll):
+        if self.is_custom_suffix(self.ac_custom_bone, context, self.ac_fk_hinge_bone):
 
             layout = self.layout
             split = layout.split()
@@ -415,7 +414,7 @@ class VIEW3D_PT_RubberHoselUI(ArmaturePanel, Panel):
         return (
             super().poll(context)
             and super().is_bone(cls.ac_custom_bone, context)
-            # and super().is_custom_suffix(cls.ac_custom_bone, context, cls.ac_foot_roll)
+            # and super().is_custom_suffix(cls.ac_custom_bone, context, cls.ac_rhose)
         )
 
     def draw(self, context: Context):
@@ -513,7 +512,7 @@ class VIEW3D_PT_IKFollowUI(ArmaturePanel, Panel):
         return (
             super().poll(context)
             and super().is_bone(cls.ac_custom_bone, context)
-            # and super().is_custom_suffix(cls.ac_custom_bone, context, cls.ac_foot_roll)
+            # and super().is_custom_suffix(cls.ac_custom_bone, context, cls.ac_ik_pole)
         )
 
     def draw(self, context: Context):
@@ -590,7 +589,7 @@ class VIEW3D_PT_IKStretchUI(ArmaturePanel, Panel):
         return (
             super().poll(context)
             and super().is_bone(cls.ac_custom_bone, context)
-            # and super().is_custom_suffix(cls.ac_custom_bone, context, cls.ac_foot_roll)
+            # and super().is_custom_suffix(cls.ac_custom_bone, context, cls.ac_ik_stretch)
         )
 
     def draw(self, context: Context):
@@ -689,7 +688,7 @@ class VIEW3D_PT_MouthPropUI(ArmaturePanel, Panel):
         return (
             super().poll(context)
             and super().is_bone(cls.ac_custom_bone, context)
-            # and super().is_custom_suffix(cls.ac_custom_bone, context, cls.ac_mask_prop)
+            # and super().is_custom_suffix(cls.ac_custom_bone, context, cls.ac_mouth_zip)
         )
 
     def draw(self, context: Context):
@@ -738,7 +737,7 @@ class VIEW3D_PT_EyesPropUI(ArmaturePanel, Panel):
         return (
             super().poll(context)
             and super().is_bone(cls.ac_custom_bone, context)
-            # and super().is_custom_suffix(cls.ac_custom_bone, context, cls.ac_mask_prop)
+            # and super().is_custom_suffix(cls.ac_custom_bone, context, cls.ac_sticky_eye)
         )
 
     def draw(self, context: Context):

@@ -1,10 +1,7 @@
-import bpy
 from bpy.types import Context, Operator
 import rna_prop_ui
 
 
-def main()-> None:
-    properties_to_ui(all_custom_properties())
 
 def all_custom_properties() -> dict:
     """ Stores all the custom properties that would get call. """
@@ -35,23 +32,24 @@ def all_custom_properties() -> dict:
     
     return all_props
 
-def properties_to_ui(all_custom_props: set) -> None:
+def properties_to_ui(all_custom_props: set, context: Context) -> None:
     for custom_property in all_custom_props:
         proper_dict = make_dict_pairs(nameprop=custom_property.prop_name, default=custom_property.default,
-                              source_bone=custom_property.source_bone, suffix=custom_property.suffix)
-        ultimate_dict = buffer_custom_prop(custom_property.source_bone, proper_dict)
+                              source_bone=custom_property.source_bone, suffix=custom_property.suffix,
+                              context=context)
+        ultimate_dict = buffer_custom_prop(custom_property.source_bone, proper_dict, context)
 
         for key in ultimate_dict:
             rna_prop_ui.rna_idprop_ui_create(
                 overridable=True, **ultimate_dict[key])
 
-
-def buffer_custom_prop(source_bone: str, buffer_dict: dict) -> dict:
+    return {"FINISHED"}
+def buffer_custom_prop(source_bone: str, buffer_dict: dict, context: Context) -> dict:
     """Return dict with custom properties that do not exist in source bone."""
 
     ultimate_dict = {}
     for key in buffer_dict:
-        if key in {_ for _ in bpy.context.active_object.pose.bones[source_bone].keys()}:
+        if key in {_ for _ in context.active_object.pose.bones[source_bone].keys()}:
             # print(f'{key} already in {source_bone} Custom Properties')
             continue
         else:
@@ -60,10 +58,12 @@ def buffer_custom_prop(source_bone: str, buffer_dict: dict) -> dict:
     return ultimate_dict
 
 
-def make_dict_pairs(nameprop: str, default: str | float | int | bool, source_bone: str, suffix: str | None = None,) -> dict:
+def make_dict_pairs(nameprop: str, default: str | float | int | bool, 
+                    source_bone: str, context: Context, suffix: str | None = None,
+                    ) -> dict:
     """If suffix is given returns a pair of prop L, R or top,bot or returns a single value if suffix is not given."""
     
-    assert is_bone(source_bone), f"'{source_bone}' bone not in active Armature."
+    assert is_bone(source_bone, context), f"'{source_bone}' bone not in active Armature."
     
     full_name = is_suffix_in_custom_prop(
         prop_name=nameprop, suffix_side=suffix)
@@ -71,10 +71,10 @@ def make_dict_pairs(nameprop: str, default: str | float | int | bool, source_bon
 
     if isinstance(full_name, tuple):
         for name in full_name:
-            dict_customprop[name] = dict(item=bpy.context.active_object.pose.bones[source_bone], prop=name, default=default)
+            dict_customprop[name] = dict(item=context.active_object.pose.bones[source_bone], prop=name, default=default)
         return dict_customprop
 
-    dict_customprop[full_name] = dict(item=bpy.context.active_object.pose.bones[source_bone], prop=full_name, default=default)
+    dict_customprop[full_name] = dict(item=context.active_object.pose.bones[source_bone], prop=full_name, default=default)
     return dict_customprop
 
 
@@ -100,9 +100,9 @@ def is_suffix_in_custom_prop(prop_name: str, suffix_side: str | None):
         return f"{prop_name}{suffix_side}"
 
 
-def is_bone(bone_name: str) -> bool:
+def is_bone(bone_name: str, context: Context) -> bool:
     """Check if bone exists in armature object."""
-    if bone_name in set(bone.name for bone in bpy.context.active_object.data.bones):
+    if bone_name in set(bone.name for bone in context.active_object.data.bones):
         return bone_name
 
 
@@ -119,6 +119,7 @@ class CustomPropertiesAccess():
         self.source_bone = source_bone
         self.default = default
         self.suffix = suffix
+        self.__source_bone = 'Properties'
 
     def __str__(self) -> None:
         return f"Property Name: {self.prop_name}, Source Bone: {self.source_bone}, Default: {self.default}, Suffix: {self.suffix}"
@@ -157,7 +158,7 @@ class CustomPropertiesAccess():
 class AC_OT_add_CustomProp(Operator):
     """Operator to set Custom Properties in a given source bone."""
 
-    bl_idname = "ac.set_bone_custom_properties"
+    bl_idname = "rigtoolkit.set_bone_custom_properties"
     bl_label = "Bone Custom Property Settings"
     bl_options = {'REGISTER'}
 
@@ -166,6 +167,8 @@ class AC_OT_add_CustomProp(Operator):
         return context.active_object.type == "ARMATURE" and context.mode == 'POSE' and context.area.type == 'VIEW_3D'
         
     def execute(self, context):
-        main()
+        properties_to_ui(all_custom_properties(), context)
+
+        self.report({"INFO"}, f"Custom Properties added in 'Properties' bone")
         return {"FINISHED"}
 
