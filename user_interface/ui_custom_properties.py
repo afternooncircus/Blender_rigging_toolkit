@@ -156,7 +156,6 @@ class ArmaturePanel(Panel):
                 text=text,
             )
 
-    
 
 # ----- Main Panel -----
 class VIEW3D_PT_CustomBonePropertiesUI(ArmaturePanel, Panel):
