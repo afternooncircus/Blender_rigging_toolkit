@@ -1,4 +1,7 @@
 from bpy.utils import register_class, unregister_class
+from bpy.types import Armature
+from bpy.props import StringProperty
+
 from . import op_custom_properties
 from . import drivers_in_custom_properties
 from . import op_armature_settings

@@ -1,5 +1,5 @@
 from bpy.types import Context, Panel
-
+import bpy
 
 class MainAccessArmatureSetting(Panel):
     bl_space_type = "PROPERTIES"
@@ -23,4 +23,8 @@ class DATA_PT_ArmatureSettings(MainAccessArmatureSetting, Panel):
             "rigtoolkit.set_armature_properties",
             text="Apply Armature Settings",
             icon="WORLD",
+        )
+        layout.operator(
+            "rigtoolkit.set_bone_custom_properties",
+            text="Custom Bone Settings",
         )
