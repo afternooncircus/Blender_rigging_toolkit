@@ -2,65 +2,68 @@ from bpy.types import Context, Operator
 import rna_prop_ui
 
 
-def all_custom_properties() -> dict:
-    """Stores all the custom properties that would get call."""
+def all_custom_properties(bone_properties: str) -> dict:
+    """Stores all the custom properties that would get call.
 
+    :return: return a dictionary with all custom properties.
+    :rtype: dict
+    """    
     # ---------- Custom Property Settings ----------
     mouth_zipper = CustomPropertiesAccess(
-        prop_name="mouth-zipper", source_bone="Properties", default=1.0
+        prop_name="mouth-zipper", source_bone=bone_properties, default=1.0
     )
     teeth_follow_rot = CustomPropertiesAccess(
-        prop_name="teeth-follow_rot", source_bone="Properties", default=1.0
+        prop_name="teeth-follow_rot", source_bone=bone_properties, default=1.0
     )
     eyes_sticky_eyelips = CustomPropertiesAccess(
-        prop_name="eyes-sticky_eyelips", source_bone="Properties", default=1.0
+        prop_name="eyes-sticky_eyelips", source_bone=bone_properties, default=1.0
     )
     foot_roll = CustomPropertiesAccess(
-        prop_name="Foot Roll", source_bone="Properties", default=1.0, suffix=".L"
+        prop_name="Foot Roll", source_bone=bone_properties, default=1.0, suffix=".L"
     )
     arm_fk_hinge = CustomPropertiesAccess(
-        prop_name="arm-FK_hinge", source_bone="Properties", default=1.0, suffix=".R"
+        prop_name="arm-FK_hinge", source_bone=bone_properties, default=1.0, suffix=".R"
     )
     leg_fk_hinge = CustomPropertiesAccess(
-        prop_name="leg-FK_hinge", source_bone="Properties", default=1.0, suffix=".L"
+        prop_name="leg-FK_hinge", source_bone=bone_properties, default=1.0, suffix=".L"
     )
     arm_ik_pole_follow = CustomPropertiesAccess(
         prop_name="arm-IK_pole_follow",
-        source_bone="Properties",
+        source_bone=bone_properties,
         default=1.0,
         suffix=".L",
     )
     leg_ik_pole_follow = CustomPropertiesAccess(
         prop_name="leg-IK_pole_follow",
-        source_bone="Properties",
+        source_bone=bone_properties,
         default=1.0,
         suffix=".L",
     )
     arm_ik_stretch = CustomPropertiesAccess(
-        prop_name="arm-IK_stretch", source_bone="Properties", default=1.0, suffix=".L"
+        prop_name="arm-IK_stretch", source_bone=bone_properties, default=1.0, suffix=".L"
     )
     leg_ik_stretch = CustomPropertiesAccess(
-        prop_name="leg-IK_stretch", source_bone="Properties", default=1.0, suffix=".L"
+        prop_name="leg-IK_stretch", source_bone=bone_properties, default=1.0, suffix=".L"
     )
     arm_ik_fk_switch = CustomPropertiesAccess(
-        prop_name="arm-IK|FK", source_bone="Properties", default=1.0, suffix=".L"
+        prop_name="arm-IK|FK", source_bone=bone_properties, default=1.0, suffix=".L"
     )
     leg_ik_fk_switch = CustomPropertiesAccess(
-        prop_name="leg-IK|FK", source_bone="Properties", default=1.0, suffix=".L"
+        prop_name="leg-IK|FK", source_bone=bone_properties, default=1.0, suffix=".L"
     )
     arm_rubber_hose = CustomPropertiesAccess(
-        prop_name="arm-rubber_hose", source_bone="Properties", default=1.0, suffix=".L"
+        prop_name="arm-rubber_hose", source_bone=bone_properties, default=1.0, suffix=".L"
     )
     leg_rubber_hose = CustomPropertiesAccess(
-        prop_name="leg-rubber_hose", source_bone="Properties", default=1.0, suffix=".L"
+        prop_name="leg-rubber_hose", source_bone=bone_properties, default=1.0, suffix=".L"
     )
 
     # ---------- Character Settings ----------
     arm_mask = CustomPropertiesAccess(
-        prop_name="arm-mask", source_bone="Properties", default=False, suffix=".L"
+        prop_name="arm-mask", source_bone=bone_properties, default=False, suffix=".L"
     )
     leg_mask = CustomPropertiesAccess(
-        prop_name="leg-mask", source_bone="Properties", default=False, suffix=".L"
+        prop_name="leg-mask", source_bone=bone_properties, default=False, suffix=".L"
     )
 
     all_props = {
@@ -87,6 +90,16 @@ def all_custom_properties() -> dict:
 
 
 def properties_to_ui(all_custom_props: set, context: Context) -> None:
+    """Takes the dictionary of custom properties and creates them in the 'Properties' bone custom properties panel.
+
+    :param all_custom_props: A set of dictionary of custom properties.
+    :type all_custom_props: set
+    :param context: context.active_object
+    :type context: Context
+    :return: None
+    :rtype: None
+    """
+
     for custom_property in all_custom_props:
         proper_dict = make_dict_pairs(
             nameprop=custom_property.prop_name,
@@ -106,12 +119,21 @@ def properties_to_ui(all_custom_props: set, context: Context) -> None:
 
 
 def buffer_custom_prop(source_bone: str, buffer_dict: dict, context: Context) -> dict:
-    """Return dict with custom properties that do not exist in source bone."""
+    """Return dict of custom properties that do not exist in source bone.
+
+    :param source_bone: Bone in which properties will be stored
+    :type source_bone: str
+    :param buffer_dict: dictionary of all custom properties
+    :type buffer_dict: dict
+    :param context: context.active_object
+    :type context: Context
+    :return: a dictionary of custom properties which are not already in.
+    :rtype: dict
+    """    
 
     ultimate_dict = {}
     for key in buffer_dict:
         if key in {_ for _ in context.active_object.pose.bones[source_bone].keys()}:
-            # print(f'{key} already in {source_bone} Custom Properties')
             continue
         else:
             ultimate_dict[key] = buffer_dict[key]
@@ -126,11 +148,24 @@ def make_dict_pairs(
     context: Context,
     suffix: str | None = None,
 ) -> dict:
-    """If suffix is given returns a pair of prop L, R or top,bot or returns a single value if suffix is not given."""
+    """Return a dictionary with custom properties. If suffix paramater is given returns a pair of prop L, R or top, bot.
 
-    assert is_bone(
-        source_bone, context
-    ), f"'{source_bone}' bone not in active Armature."
+    :param nameprop: name of the custom property
+    :type nameprop: str
+    :param default: type of custom property
+    :type default: str | float | int | bool
+    :param source_bone: bone in which custom property are stored
+    :type source_bone: str
+    :param context: context.active_object
+    :type context: Context
+    :param suffix: '.L', '.R', '.C', '.top', '.bot', defaults to None
+    :type suffix: str | None, optional
+    :return: dictionary with custom properties
+    :rtype: dict
+    """    
+
+    # Might not be neccessary, but keep it for now.
+    # assert is_bone(source_bone, context), f"'{source_bone}' bone not in active Armature." 
 
     full_name = is_suffix_in_custom_prop(prop_name=nameprop, suffix_side=suffix)
     dict_customprop = {}
@@ -152,8 +187,16 @@ def make_dict_pairs(
     return dict_customprop
 
 
-def is_suffix_in_custom_prop(prop_name: str, suffix_side: str | None):
-    """Return custom property name.suffix if it has some."""
+def is_suffix_in_custom_prop(prop_name: str, suffix_side: str | None) -> str:
+    """Return custom property with a suffix in the if it is given.
+
+    :param prop_name: name of property
+    :type prop_name: str
+    :param suffix_side: suffix can be '.L', '.R', '.C', '.top', '.bot'
+    :type suffix_side: str | None
+    :return: name of property + suffix side
+    :rtype: str
+    """    
 
     if suffix_side == None:
         return prop_name
@@ -175,13 +218,22 @@ def is_suffix_in_custom_prop(prop_name: str, suffix_side: str | None):
 
 
 def is_bone(bone_name: str, context: Context) -> bool:
-    """Check if bone exists in armature object."""
+    """Check if bone exists in armature object.
+
+    :param bone_name: bone name
+    :type bone_name: str
+    :param context: context.active_object
+    :type context: Context
+    :return: bone name, None if it is not on active armature.
+    :rtype: bool
+    """    
     if bone_name in set(bone.name for bone in context.active_object.data.bones):
         return bone_name
 
 
 class CustomPropertiesAccess:
-    """Sets instances of properties for bone custom properties."""
+    """Sets instances of properties for bone custom properties. 
+    """    
 
     def __init__(
         self,
@@ -189,14 +241,17 @@ class CustomPropertiesAccess:
         source_bone: str,
         default: str | float | int | bool,
         suffix: str | None = None,
+        min_value: float | int = 0.0,
+        max_value: float | int = 1.0,
     ) -> None:
 
         self.prop_name = prop_name
         self.source_bone = source_bone
         self.default = default
         self.suffix = suffix
-        self.__source_bone = "Properties"
-
+        self.min = min_value
+        self.max = max_value
+        
     def __str__(self) -> None:
         return f"Property Name: {self.prop_name}, Source Bone: {self.source_bone}, Default: {self.default}, Suffix: {self.suffix}"
 
@@ -236,9 +291,32 @@ class CustomPropertiesAccess:
             )
         self._default = default
 
+    @property
+    def min_value(self):
+        return self._min_value
+
+    @min_value.setter
+    def min_value(self, min_value):
+        if isinstance(min_value, float) or isinstance(min_value, int):
+            raise ValueError(
+                f"Default Paramater: '{min_value}' was not given or valid. Expected 'int', 'float', types, not {type(min_value)}"
+            )
+        self._default = min_value
+
+    @property
+    def max_value(self):
+        return self._max_value
+
+    @min_value.setter
+    def max_value(self, max_value):
+        if isinstance(max_value, float) or isinstance(max_value, int):
+            raise ValueError(
+                f"Default Paramater: '{max_value}' was not given or valid. Expected 'int', 'float', types, not {type(max_value)}"
+            )
+        self._default = max_value
 
 class AC_OT_add_CustomProp(Operator):
-    """Operator to set Custom Properties in a given source bone."""
+    """ Operator to set Custom Properties in a given source bone. """
 
     bl_idname = "rigtoolkit.set_bone_custom_properties"
     bl_label = "Bone Custom Property Settings"
@@ -253,7 +331,13 @@ class AC_OT_add_CustomProp(Operator):
         )
 
     def execute(self, context):
-        properties_to_ui(all_custom_properties(), context)
+        source_bone_properties = "Properties"
 
-        self.report({"INFO"}, f"Custom Properties added in 'Properties' bone")
+        if not is_bone(source_bone_properties, context):
+            self.report({"WARNING"}, f"There is no bone named '{source_bone_properties}'")
+            return {"CANCELLED"}
+        
+        properties_to_ui(all_custom_properties(source_bone_properties), context)
+
+        self.report({"INFO"}, f"Custom Properties added in '{source_bone_properties}' bone")
         return {"FINISHED"}

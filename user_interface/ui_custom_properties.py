@@ -159,7 +159,7 @@ class ArmaturePanel(Panel):
 
 # ----- Main Panel -----
 class VIEW3D_PT_CustomBonePropertiesUI(ArmaturePanel, Panel):
-    """Draws main UI tab for all properties under the label 'Custom Properties Settings'."""
+    """ Draws main UI tab for all properties under the label 'Custom Properties Settings'. """
 
     bl_label = "Custom Properties Settings"
     bl_options = {"HEADER_LAYOUT_EXPAND"}
@@ -178,7 +178,7 @@ class VIEW3D_PT_CustomBonePropertiesUI(ArmaturePanel, Panel):
 
 
 class VIEW3D_PT_IkFkSwitchUI(ArmaturePanel, Panel):
-    """Draws UI tab for 'IK|FK Switch' properties. A child of 'Custom Properties Settings' Tab."""
+    """ Draws UI tab for 'IK|FK Switch' properties. A child of 'Custom Properties Settings' Tab. """
 
     bl_label = "IK|FK Switch"
     bl_options = {"DEFAULT_CLOSED"}
@@ -243,7 +243,7 @@ class VIEW3D_PT_IkFkSwitchUI(ArmaturePanel, Panel):
 
 
 class VIEW3D_PT_FkHingeUI(ArmaturePanel, Panel):
-    """Draws UI tab for 'FK Hinge' properties. A child of 'Custom Properties Settings' Tab."""
+    """ Draws UI tab for 'FK Hinge' properties. A child of 'Custom Properties Settings' Tab. """
 
     bl_label = "FK Hinge"
     bl_options = {"DEFAULT_CLOSED"}
@@ -331,7 +331,7 @@ class VIEW3D_PT_FkHingeUI(ArmaturePanel, Panel):
 
 # ----- Main Panel -----
 class VIEW3D_PT_LimbSettingsUI(ArmaturePanel, Panel):
-    """Draws main UI tab for 'Limbs Settings' properties. A child of 'Custom Properties Settings' Tab."""
+    """ Draws main UI tab for 'Limbs Settings' properties. A child of 'Custom Properties Settings' Tab. """
 
     bl_label = "Limbs Settings"
     bl_options = {"DEFAULT_CLOSED"}
@@ -351,7 +351,7 @@ class VIEW3D_PT_LimbSettingsUI(ArmaturePanel, Panel):
 
 
 class VIEW3D_PT_FootRollUI(ArmaturePanel, Panel):
-    """Draws UI tab for 'Foot Roll' properties. A child of 'Limbs Settings' Tab."""
+    """ Draws UI tab for 'Foot Roll' properties. A child of 'Limbs Settings' Tab. """
 
     bl_label = "Foot Roll"
     bl_options = {"DEFAULT_CLOSED"}
@@ -369,7 +369,6 @@ class VIEW3D_PT_FootRollUI(ArmaturePanel, Panel):
     def draw(self, context: Context):
         if self.is_custom_suffix(self.ac_custom_bone, context, self.ac_foot_roll):
             layout = self.layout
-            # layout.label(text="Foot Roll")
 
             # New split of pair columns
             split = layout.split()
@@ -401,7 +400,7 @@ class VIEW3D_PT_FootRollUI(ArmaturePanel, Panel):
 
 
 class VIEW3D_PT_RubberHoselUI(ArmaturePanel, Panel):
-    """Draws UI tab for 'Rubber Hose' properties. A child of 'Limbs Settings' Tab."""
+    """ Draws UI tab for 'Rubber Hose' properties. A child of 'Limbs Settings' Tab. """
 
     bl_label = "Rubber Hose"
     bl_options = {"DEFAULT_CLOSED"}
@@ -479,7 +478,7 @@ class VIEW3D_PT_RubberHoselUI(ArmaturePanel, Panel):
 
 # ----- Main Panel -----
 class VIEW3D_PT_IKSettingsUI(ArmaturePanel, Panel):
-    """Draws main UI tab for 'IK Settings' properties. A child of 'Custom Properties Settings' Tab."""
+    """ Draws main UI tab for 'IK Settings' properties. A child of 'Custom Properties Settings' Tab. """
 
     bl_label = "IK Settings"
     bl_options = {"DEFAULT_CLOSED"}
@@ -499,7 +498,7 @@ class VIEW3D_PT_IKSettingsUI(ArmaturePanel, Panel):
 
 
 class VIEW3D_PT_IKFollowUI(ArmaturePanel, Panel):
-    """Draws UI tab for 'IK Follow' properties. A child of 'IK Settings' Tab."""
+    """ Draws UI tab for 'IK Follow' properties. A child of 'IK Settings' Tab. """
 
     bl_label = "IK Follow"
     bl_options = {"DEFAULT_CLOSED"}
@@ -576,7 +575,7 @@ class VIEW3D_PT_IKFollowUI(ArmaturePanel, Panel):
 
 
 class VIEW3D_PT_IKStretchUI(ArmaturePanel, Panel):
-    """Draws UI tab for 'IK Stretch' properties. A child of 'IK Settings' Tab."""
+    """ Draws UI tab for 'IK Stretch' properties. A child of 'IK Settings' Tab. """
 
     bl_label = "IK Stretch"
     bl_options = {"DEFAULT_CLOSED"}
@@ -654,7 +653,7 @@ class VIEW3D_PT_IKStretchUI(ArmaturePanel, Panel):
 
 # ----- Main Panel -----
 class VIEW3D_PT_FaceSettingsUI(ArmaturePanel, Panel):
-    """Draws main UI tab for 'Face Settings' properties. A child of 'Custom Properties Settings' Tab."""
+    """ Draws main UI tab for 'Face Settings' properties. A child of 'Custom Properties Settings' Tab. """
 
     bl_label = "Face Settings"
     bl_options = {"DEFAULT_CLOSED"}
@@ -674,7 +673,7 @@ class VIEW3D_PT_FaceSettingsUI(ArmaturePanel, Panel):
 
 
 class VIEW3D_PT_MouthPropUI(ArmaturePanel, Panel):
-    """Draws UI tab for 'Mouth Settings' properties. A child of 'Character Properties' Tab."""
+    """ Draws UI tab for 'Mouth Settings' properties. A child of 'Character Properties' Tab. """
 
     bl_label = "Mouth Settings"
     bl_options = {"DEFAULT_CLOSED"}
@@ -723,7 +722,7 @@ class VIEW3D_PT_MouthPropUI(ArmaturePanel, Panel):
 
 
 class VIEW3D_PT_EyesPropUI(ArmaturePanel, Panel):
-    """Draws UI tab for 'Eyes Settings' properties. A child of 'Character Properties' Tab."""
+    """ Draws UI tab for 'Eyes Settings' properties. A child of 'Character Properties' Tab. """
 
     bl_label = "Eyes Settings"
     bl_options = {"DEFAULT_CLOSED"}
@@ -760,7 +759,7 @@ class VIEW3D_PT_EyesPropUI(ArmaturePanel, Panel):
 
 # ----- Main Panel -----
 class VIEW3D_PT_CharacterSettingsUI(ArmaturePanel, Panel):
-    """Draws main tab for all properties under the label 'Character Properties'."""
+    """ Draws main tab for all properties under the label 'Character Properties'. """
 
     bl_label = "Character Properties"
     bl_options = {"DEFAULT_CLOSED"}
@@ -779,7 +778,7 @@ class VIEW3D_PT_CharacterSettingsUI(ArmaturePanel, Panel):
 
 
 class VIEW3D_PT_BonesMaskPropUI(ArmaturePanel, Panel):
-    """Draws UI tab for 'Mask Settings' properties. A child of 'Character Properties' Tab."""
+    """ Draws UI tab for 'Mask Settings' properties. A child of 'Character Properties' Tab. """
 
     bl_label = "Mask Settings"
     bl_options = {"DEFAULT_CLOSED"}
