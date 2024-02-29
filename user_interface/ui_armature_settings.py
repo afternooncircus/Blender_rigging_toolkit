@@ -18,13 +18,13 @@ class DATA_PT_ArmatureSettings(MainAccessArmatureSetting, Panel):
 
     def draw(self, context: Context):
         layout = self.layout
-        layout.use_property_split = True
-        layout.operator(
+        col = layout.column(align=True)
+        col.operator(
             "rigtoolkit.set_armature_properties",
             text="Apply Armature Settings",
             icon="WORLD",
         )
-        layout.operator(
+        col.operator(
             "rigtoolkit.set_bone_custom_properties",
             text="Custom Bone Settings",
         )

@@ -306,7 +306,7 @@ class AC_OT_add_CustomProp(Operator):
     def poll(cls, context: Context) -> bool:
         return (
             context.active_object.type == "ARMATURE"
-            and context.mode == "POSE"
+            # and context.mode == "POSE"
             # and context.area.type == "VIEW_3D"
         )
 
