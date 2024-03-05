@@ -304,11 +304,9 @@ class AC_OT_add_CustomProp(Operator):
 
     @classmethod
     def poll(cls, context: Context) -> bool:
-        return (
-            context.active_object.type == "ARMATURE"
-            # and context.mode == "POSE"
-            # and context.area.type == "VIEW_3D"
-        )
+        if hasattr(context.active_object, "type"):
+            return context.active_object.type == "ARMATURE"
+        return False
 
     def execute(self, context):
         source_bone_properties = "Properties"

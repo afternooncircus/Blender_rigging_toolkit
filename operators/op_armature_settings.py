@@ -19,7 +19,10 @@ class AC_OT_Set_ArmatureProp(Operator):
 
     @classmethod
     def poll(cls, context: Context) -> bool:
-        return context.active_object.type == "ARMATURE"
+        if hasattr(context.active_object, "type"):
+            return context.active_object.type == "ARMATURE"
+        return False
+        # return context.active_object.type == "ARMATURE"
         # return context.active_object.type == "ARMATURE" and context.area.type == 'VIEW_3D'
     
     @staticmethod
