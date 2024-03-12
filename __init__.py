@@ -27,13 +27,15 @@ bl_info = {
 
 from .user_interface import register_ui, unregister_ui
 from .operators import register_operators, unregister_operators
-
+from .rig_modules import register_bone_presets, unregister_bone_presets
 
 def register() -> None:
     register_ui()
     register_operators()
+    register_bone_presets()
 
 
 def unregister() -> None:
     unregister_ui()
     unregister_operators()
+    unregister_bone_presets()

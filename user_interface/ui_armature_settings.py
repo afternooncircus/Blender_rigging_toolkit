@@ -28,3 +28,7 @@ class DATA_PT_ArmatureSettings(MainAccessArmatureSetting, Panel):
             "rigtoolkit.set_bone_custom_properties",
             text="Custom Bone Settings",
         )
+        col.operator(
+            "rigtoolkit.create_single_bbone",
+            text="Single Bbone Chain",
+        )
