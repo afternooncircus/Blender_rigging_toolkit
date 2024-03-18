@@ -30,8 +30,8 @@ class AC_OT_NewBBones(Operator):
                 self.report({"ERROR"}, f"{bone.name} is not connected")
                 return {"CANCELLED"}
 
-        bhandles = set()
         for bone in context.selected_editable_bones:
+            bhandles = set()
             if bone.parent and bone.use_connect:
                 bone.bbone_custom_handle_start = bone.parent.bbone_custom_handle_end
 
@@ -64,12 +64,12 @@ class AC_OT_NewBBones(Operator):
                 )
                 bhandles.add(str_bone)
                 bhandles.add(end_bone)
-
+            for hbone in bhandles:
+                set_bone.bbone_handles(bone, bhandle=hbone, context=context)    
             set_bone.bbones_prop(bone)
             set_bone.bone_prop(bone)
         
-        for hbone in bhandles:
-            set_bone.bbone_handles(bone, bhandle=hbone, context=context)            
+                
 
         if not context.mode == "POSE":
             ops.object.mode_set(mode="POSE")
