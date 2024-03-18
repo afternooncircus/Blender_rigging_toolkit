@@ -2,7 +2,6 @@ from bpy.utils import register_class, unregister_class
 
 from . import single_bbone_chain
 
-
 classes: list = [
     single_bbone_chain.AC_OT_NewBBones,
 ]
