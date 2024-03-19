@@ -1,5 +1,4 @@
 from bpy.types import Context, EditBone, PoseBone
-    
 
 def naming(bone: EditBone, bone_type: str) -> str:
     '''Puts preffix to bone name. It replaces its previous one if it has.'''
@@ -9,6 +8,8 @@ def naming(bone: EditBone, bone_type: str) -> str:
     bname[0] = bone_type
     return '-'.join(bname)
 
+def parenting(bone: EditBone, parentbone: EditBone, context: Context):
+    bone.parent = parentbone
 
 def create(
 bone: EditBone,
@@ -17,8 +18,13 @@ bone_head: tuple,
 bbone_size: float,
 length: float,
 context: Context,
+bone_name: str = '',
 ) -> EditBone:
-    bname = naming(bone, bone_type)
+    if bone_name:
+        bname = bone_name
+    else:
+        bname = naming(bone, bone_type)
+        
     new_bone: str = context.object.data.edit_bones.new(bname)
     new_bone.head = bone_head
     new_bone.tail = (bone.vector) + bone.tail
