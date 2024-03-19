@@ -29,7 +29,9 @@ class AC_OT_NewBBones(Operator):
             if bone.parent and not bone.use_connect:
                 self.report({"ERROR"}, f"{bone.name} is not connected")
                 return {"CANCELLED"}
-
+            
+        #----------------------Operation----------------
+            
         fk_parents: list = []
         bhandles: list = []
         for bone in context.selected_editable_bones:

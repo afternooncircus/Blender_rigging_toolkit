@@ -32,3 +32,11 @@ class DATA_PT_ArmatureSettings(MainAccessArmatureSetting, Panel):
             "rigtoolkit.create_single_bbone",
             text="Single Bbone Chain",
         )
+        col.operator(
+            "rigtoolkit.create_single_control",
+            text="Single Control",
+        )
+        col.operator(
+            "rigtoolkit.create_single_control_constraint",
+            text="Single Control Copy Constraint",
+        )
