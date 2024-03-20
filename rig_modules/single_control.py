@@ -4,7 +4,7 @@ from . import set_bone
 from . import set_bcontraints
 
 class AC_OT_SingleControl(Operator):
-    """Adding BBones Handles"""
+    """Adding CTRL Bones to selected bones."""
 
     bl_idname = "rigtoolkit.create_single_control"
     bl_label = "Add a single control to selected bones."
@@ -53,7 +53,7 @@ class AC_OT_SingleControl(Operator):
     
 
 class AC_OT_SingleControlConstraint(Operator):
-    """Adding BBones Handles"""
+    """Adding a CTRL Bone with Copy Transform to selected bones. Use it when bone hierarchy is needed."""
 
     bl_idname = "rigtoolkit.create_single_control_constraint"
     bl_label = "Add a single control to selected bones with Copy Transform constraint."

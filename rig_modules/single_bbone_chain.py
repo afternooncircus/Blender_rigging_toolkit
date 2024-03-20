@@ -5,7 +5,7 @@ from . import set_bcontraints
 
 
 class AC_OT_NewBBones(Operator):
-    """Adding BBones Handles"""
+    """Adding BBones Handles and a FK chain to selected bones."""
 
     bl_idname = "rigtoolkit.create_single_bbone"
     bl_label = "Create Single Bbone Chain"
@@ -32,9 +32,15 @@ class AC_OT_NewBBones(Operator):
             
         #----------------------Operation----------------
             
+        bone_chain = set_bone.sorting(bone_chain= context.selected_editable_bones)
+        
+        if not bone_chain:
+            self.report({"ERROR"}, f"All Bones are parented, unparent root of the chain.")
+            return {"CANCELLED"}
+        
         fk_parents: list = []
         bhandles: list = []
-        for bone in context.selected_editable_bones:
+        for bone in bone_chain:
             if bone.parent and bone.use_connect:
                 bone.bbone_custom_handle_start = bone.parent.bbone_custom_handle_end
 
@@ -131,7 +137,7 @@ class AC_OT_NewBBones(Operator):
 
         CTRLwidget = set_bone.widget(widget_name='WGT-CTRL', context=context)            
         FKwidget = set_bone.widget(widget_name='WGT-FK', context=context)
-        HANDLEwidget = set_bone.widget(widget_name='WGT-HANDLE', context=context)
+        HANDLEwidget = set_bone.widget(widget_name='WGT-fullsphere', context=context)
         
         for bone in context.active_object.pose.bones.values():
             if bone.name.startswith('CTRL'):
