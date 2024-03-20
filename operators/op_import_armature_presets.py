@@ -1,5 +1,5 @@
 from bpy.types import Context, Operator
-from pathlib import Path, PurePath
+from pathlib import Path
 import bpy
 
 class HumanArmaturePreset(Operator):
@@ -15,10 +15,11 @@ class HumanArmaturePreset(Operator):
     
     def execute(self, context):
         current_dir = Path(__file__).parent.parent
-        preset_folder = rf'{current_dir}\armature_presets\human_preset.blend'
+        folder = Path('/armature_presets/human_preset.blend')
+        preset_folder = f'{current_dir}{folder}'
         armature_name = 'human_preset'
 
-        #Code by Zender on Blenderartist.
+        #Code by Zender on Blenderartist. Edited to work specifically on this.
         with bpy.data.libraries.load(preset_folder, link=False) as (data_from, data_to):
             if not armature_name in {name for name in data_from.objects}:
                 self.report({"ERROR"}, f"There is no armature named '{armature_name}'")

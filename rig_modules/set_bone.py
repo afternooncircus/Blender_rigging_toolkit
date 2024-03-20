@@ -1,4 +1,7 @@
-from bpy.types import Context, EditBone, PoseBone
+from bpy.types import Context, EditBone, PoseBone, BoneCollection
+from pathlib import Path
+import bpy
+import math
 
 def naming(bone: EditBone, bone_type: str) -> str:
     '''Puts preffix to bone name. It replaces its previous one if it has.'''
@@ -8,7 +11,8 @@ def naming(bone: EditBone, bone_type: str) -> str:
     bname[0] = bone_type
     return '-'.join(bname)
 
-def parenting(bone: EditBone, parentbone: EditBone, context: Context):
+def parenting(bone: EditBone, parentbone: EditBone, context: Context) -> any:
+    bone.use_connect = False
     bone.parent = parentbone
 
 def create(
@@ -67,7 +71,6 @@ def bbone_handles(bone: EditBone, bhandle: EditBone, context: Context) -> any:
 
 def bone_prop(bone: EditBone, type_inscale: str = 'ALIGNED') -> any:
     '''Set bone properties in Edit Mode.'''
-    bone.use_connect = False
     bone.inherit_scale = type_inscale
     return {"FINISHED"}
 
@@ -75,8 +78,46 @@ def pbone_properties(bone: PoseBone) -> any:
     """Set bone properties in Pose Mode."""
     bone.rotation_mode = "XYZ"
 
-    if bone.bone.use_deform:
-        bone.bbone_easein = 1
-        bone.bbone_easeout = 1
+    # if bone.bone.use_deform:
+    #     bone.bbone_easein = 1
+    #     bone.bbone_easeout = 1
     return {"FINISHED"}
 
+def collection(bone: EditBone, colname: str, context: Context) -> any:
+    arm = context.active_object.data
+    if colname not in arm.collections: 
+        arm.collections.new(name=colname)
+    arm.collections[colname].assign(bone)
+    return {'FINISHED'}
+
+def widget(widget_name: str, context: Context) -> EditBone:
+    current_dir = Path(__file__).parent.parent
+    folder = Path('/armature_presets/widgets.blend')
+    preset_folder = f'{current_dir}{folder}'
+
+    for obj in bpy.data.objects.values():
+        if obj.name == widget_name:
+            return obj
+        
+    with bpy.data.libraries.load(preset_folder, link=False) as (data_from, data_to):
+        data_to.objects = [name for name in data_from.objects if not name in bpy.data.objects.keys() and name in widget_name]
+
+    widgetcoll = context.active_object.name.replace('RIG', 'WIDGET')
+    for obj in data_to.objects:
+        context.scene.collection.objects.link(obj)
+        bpy.data.collections[widgetcoll].objects.link(obj)
+        context.scene.collection.objects.unlink(obj)  
+        return obj
+    
+def assign_widget(bone: PoseBone, shape) -> any:               
+    bone.custom_shape = shape
+    bone.custom_shape_rotation_euler[0] = math.radians(90)
+    if bone.name.startswith('strHandle') or bone.name.startswith('endHandle'):
+        bone.custom_shape_scale_xyz[0] = 0.5
+        bone.custom_shape_scale_xyz[1] = bone.custom_shape_scale_xyz[0]
+        bone.custom_shape_scale_xyz[2] = bone.custom_shape_scale_xyz[0]
+        return {'FINISHED'}
+    bone.custom_shape_scale_xyz[0] = 1.3
+    bone.custom_shape_scale_xyz[1] = bone.custom_shape_scale_xyz[0]
+    bone.custom_shape_scale_xyz[2] = bone.custom_shape_scale_xyz[0]
+    

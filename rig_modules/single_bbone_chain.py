@@ -120,12 +120,27 @@ class AC_OT_NewBBones(Operator):
             #Parent last handle bone to last FK bone.
             set_bone.parenting(bone=bhandles[-1], parentbone=fk_parents[-1], context=context)
 
+        for handbone in bhandles:
+            set_bone.collection(bone=handbone, colname='BB Handles',context=context)    
+
+        for fkbone in fk_parents:
+            set_bone.collection(bone=fkbone, colname='FK',context=context)    
 
         if not context.mode == "POSE":
             ops.object.mode_set(mode="POSE")
-                    
 
+        CTRLwidget = set_bone.widget(widget_name='WGT-CTRL', context=context)            
+        FKwidget = set_bone.widget(widget_name='WGT-FK', context=context)
+        HANDLEwidget = set_bone.widget(widget_name='WGT-HANDLE', context=context)
+        
         for bone in context.active_object.pose.bones.values():
+            if bone.name.startswith('CTRL'):
+                set_bone.assign_widget(bone=bone, shape=CTRLwidget)
+            elif bone.name.startswith('FK'):
+                set_bone.assign_widget(bone=bone, shape=FKwidget)
+            elif bone.name.startswith('strHandle') or bone.name.startswith('endHandle'):
+                set_bone.assign_widget(bone=bone, shape=HANDLEwidget)
+
             set_bone.pbone_properties(bone=bone)
 
         for bone in context.selected_pose_bones:

@@ -32,13 +32,32 @@ class AC_OT_Set_ArmatureProp(Operator):
 
         armature = bpy.context.active_object
         armature.name = set_name(armature, context)
+        armature_mstr = armature.name.replace('RIG', 'MASTER')
+        armature_obj = armature.name.replace('RIG', 'OBJECTS')
+        armature_widget = armature.name.replace('RIG', 'WIDGET')
 
-        if armature.name not in bpy.context.scene.collection.children.keys():
+        if armature_mstr not in context.scene.collection.children.keys():
+            #Master Collection
+            mstrcoll = bpy.data.collections.new(f'{armature_mstr}')
+            context.scene.collection.children.link(mstrcoll)
+
+        if armature.name not in bpy.data.collections[armature_mstr].children.keys():
+            #Object Collection
+            objcoll = bpy.data.collections.new(f'{armature_obj}')
+            bpy.data.collections[armature_mstr].children.link(objcoll)
+            #Rig Collection.
             coll = bpy.data.collections.new(f'{armature.name}')
-            context.scene.collection.children.link(coll)
+            bpy.data.collections[armature_mstr].children.link(coll)
+            #Widget Collection.
+            wgtcoll = bpy.data.collections.new(f'{armature_widget}')
+            bpy.data.collections[armature_mstr].children.link(wgtcoll)
+            bpy.data.collections[armature_widget].hide_viewport = True
 
-            coll.objects.link(armature)
-            context.scene.collection.objects.unlink(armature)
+        if armature in bpy.data.collections[armature.name].objects.values():
+            return {'FINISHED'}
+        
+        bpy.data.collections[armature.name].objects.link(armature)
+        context.scene.collection.objects.unlink(armature)
 
     @staticmethod
     def set_object_data(context: Context,):

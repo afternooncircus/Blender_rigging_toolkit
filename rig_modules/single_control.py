@@ -33,14 +33,21 @@ class AC_OT_SingleControl(Operator):
                     length=0.15,
                     context=context,
                 )
+            set_bone.bone_prop(bone)
             set_bone.parenting(bone, ctrl_bone, context)
+            set_bone.collection(bone=ctrl_bone, colname='CTRL',context=context)    
 
         if not context.mode == "POSE":
             ops.object.mode_set(mode="POSE")
                     
 
+        CTRLwidget = set_bone.widget(widget_name='WGT-CTRL', context=context)
+        
         for bone in context.active_object.pose.bones.values():
+            if bone.name.startswith('CTRL'):
+                set_bone.assign_widget(bone=bone, shape=CTRLwidget)
             set_bone.pbone_properties(bone=bone)
+        
         self.report({"INFO"}, f"Control added")
         return {"FINISHED"}
     
@@ -81,12 +88,17 @@ class AC_OT_SingleControlConstraint(Operator):
                     length=0.15,
                     context=context,
                 )
+            
+            set_bone.collection(bone=ctrl_bone, colname='CTRL',context=context)    
 
         if not context.mode == "POSE":
             ops.object.mode_set(mode="POSE")
                     
-
+        CTRLwidget = set_bone.widget(widget_name='WGT-CTRL', context=context)
+        
         for bone in context.active_object.pose.bones.values():
+            if bone.name.startswith('CTRL'):
+                set_bone.assign_widget(bone=bone, shape=CTRLwidget)
             set_bone.pbone_properties(bone=bone)
 
         #Add Constraints
