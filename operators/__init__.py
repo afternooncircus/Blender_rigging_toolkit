@@ -6,10 +6,13 @@ from . import op_armature_settings
 
 from . import op_import_armature_presets
 
+from . import op_parenting_to_bones
+
 classes: list = [
     op_custom_properties.AC_OT_add_CustomProp,
     op_armature_settings.AC_OT_Set_ArmatureProp,
     op_import_armature_presets.HumanArmaturePreset,
+    op_parenting_to_bones.ParentingToBone,
 ]
 
 

@@ -40,3 +40,7 @@ class DATA_PT_ArmatureSettings(MainAccessArmatureSetting, Panel):
             "rigtoolkit.create_single_control_constraint",
             text="Single Control Copy Constraint",
         )
+        col.operator(
+            "rigtoolkit.parenting_to_bones",
+            text="Parent Cubes to bones",
+        )

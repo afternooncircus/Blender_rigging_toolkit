@@ -31,13 +31,15 @@ class AC_OT_NewBBones(Operator):
                 return {"CANCELLED"}
             
         #----------------------Operation----------------
-            
+        
+        #sorting bone chain by hierchachy.
         bone_chain = set_bone.sorting(bone_chain= context.selected_editable_bones)
         
         if not bone_chain:
             self.report({"ERROR"}, f"All Bones are parented, unparent root of the chain.")
             return {"CANCELLED"}
         
+        #creating bones.
         fk_parents: list = []
         bhandles: list = []
         for bone in bone_chain:
@@ -101,9 +103,11 @@ class AC_OT_NewBBones(Operator):
                 fk_parents.append(fk_bone)
                 set_bone.parenting(bone=bhandles[0], parentbone=fk_parents[-1], context=context)
 
-
+            #Adding bone handles.
             for handlbone in bhandles:
-                set_bone.bbone_handles(bone, bhandle=handlbone, context=context)    
+                set_bone.bbone_handles(bone, bhandle=handlbone, context=context)
+            
+            #Setting Properties. 
             set_bone.bbones_prop(bone)
             set_bone.bone_prop(bone)
         
@@ -126,6 +130,7 @@ class AC_OT_NewBBones(Operator):
             #Parent last handle bone to last FK bone.
             set_bone.parenting(bone=bhandles[-1], parentbone=fk_parents[-1], context=context)
 
+        #Settings collections.
         for handbone in bhandles:
             set_bone.collection(bone=handbone, colname='BB Handles',context=context)    
 
@@ -135,6 +140,7 @@ class AC_OT_NewBBones(Operator):
         if not context.mode == "POSE":
             ops.object.mode_set(mode="POSE")
 
+        #Applying widgets.
         CTRLwidget = set_bone.widget(widget_name='WGT-CTRL', context=context)            
         FKwidget = set_bone.widget(widget_name='WGT-FK', context=context)
         HANDLEwidget = set_bone.widget(widget_name='WGT-fullsphere', context=context)
@@ -147,11 +153,12 @@ class AC_OT_NewBBones(Operator):
             elif bone.name.startswith('strHandle') or bone.name.startswith('endHandle'):
                 set_bone.assign_widget(bone=bone, shape=HANDLEwidget)
 
+            #Setting bone properties in pose mode.
             set_bone.pbone_properties(bone=bone)
 
         for bone in context.selected_pose_bones:
             #Set Properties in Pose Mode
-            # set_bone.pbone_properties(bone=bone)
+            #   set_bone.pbone_properties(bone=bone)
 
             #Add Constraints
             strhandl = f'strHandle-{bone.name}' if 'DEF' not in bone.name else bone.name.replace('DEF', 'strHandle')
@@ -170,6 +177,5 @@ class AC_OT_NewBBones(Operator):
                 space="WORLD",
                 context=context,
             )
-
         self.report({"INFO"}, f"BBones handles added")
         return {"FINISHED"}
