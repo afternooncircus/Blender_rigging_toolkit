@@ -9,6 +9,7 @@ from bpy.props import (
     FloatProperty,
 )
 
+
 def add_box(width, height, depth):
     """
     This function takes inputs and returns vertex and face arrays.
@@ -75,39 +76,6 @@ class ParentingToBone(Operator, AddObjectHelper):
         else:
             return False
 
-    # Function by batFINGER. I feel like this person has save me quite a few times.
-    @staticmethod
-    def apply_transfrom(ob, use_location=True, use_rotation=True, use_scale=False):
-        mb = ob.matrix_basis
-        I = Matrix()
-        loc, rot, scale = mb.decompose()
-
-        # rotation
-        T = Matrix.Translation(loc)
-        R = mb.to_3x3().normalized().to_4x4()
-        S = Matrix.Diagonal(scale).to_4x4()
-
-        transform = [I, I, I]
-        basis = [T, R, S]
-
-        def swap(i):
-            transform[i], basis[i] = basis[i], transform[i]
-
-        if use_location:
-            swap(0)
-        if use_rotation:
-            swap(1)
-        if use_scale:
-            swap(2)
-
-        M = transform[0] @ transform[1] @ transform[2]
-        if hasattr(ob.data, "transform"):
-            ob.data.transform(M)
-        for c in ob.children:
-            c.matrix_local = M @ c.matrix_local
-
-        ob.matrix_basis = basis[0] @ basis[1] @ basis[2]
-
     @classmethod
     def poll(cls, context: Context) -> bool:
         if hasattr(context.active_object, "type") and context.mode == "OBJECT":
@@ -120,10 +88,10 @@ class ParentingToBone(Operator, AddObjectHelper):
         # Add Box code from example files.
         for bone in arm.pose.bones:
             verts_loc, faces = add_box(
-            self.width,
-            self.height,
-            self.depth,
-        )
+                self.width,
+                self.height,
+                self.depth,
+            )
 
             if bpy.data.meshes.get(bone.name):
                 mesh = bpy.data.meshes[bone.name]
@@ -146,20 +114,17 @@ class ParentingToBone(Operator, AddObjectHelper):
             # add the mesh as an object into the scene with this utility module
             object_utils.object_data_add(context, mesh, operator=self)
             obj = bpy.data.objects.get(mesh.name)
-            # Set bone to bone head and apply transforms.
-            obj.location = arm.pose.bones[obj.name].head
-            self.apply_transfrom(obj)
 
             posebone = arm.pose.bones.get(obj.name)
 
             if not posebone:
                 self.report({"ERROR"}, f"There's no bone name {obj.name}")
                 return {'CANCELLED'}
-            
-            original_wmatrix = obj.matrix_world.copy()
+
             obj.parent = arm
             obj.parent_bone = bone.name
             obj.parent_type = 'BONE'
-            obj.matrix_world = original_wmatrix
+
+            obj.matrix_world = arm.pose.bones[obj.name].matrix
 
         return {"FINISHED"}
