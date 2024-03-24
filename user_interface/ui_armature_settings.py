@@ -44,3 +44,8 @@ class DATA_PT_ArmatureSettings(MainAccessArmatureSetting, Panel):
             "rigtoolkit.parenting_to_bones",
             text="Parent Cubes to bones",
         )
+        col.operator(
+            "rigtoolkit.create_torso_chain",
+            text="Torso Chain",
+        )
+

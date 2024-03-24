@@ -87,6 +87,10 @@ class ParentingToBone(Operator, AddObjectHelper):
 
         # Add Box code from example files.
         for bone in arm.pose.bones:
+            # Only add cubes to deform bones.
+            if not bone.bone.use_deform:
+                continue
+
             verts_loc, faces = add_box(
                 self.width,
                 self.height,

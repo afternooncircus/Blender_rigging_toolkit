@@ -32,14 +32,14 @@ class AC_OT_NewBBones(Operator):
             
         #----------------------Operation----------------
         
-        #sorting bone chain by hierchachy.
+        #sorting bone chain by hierarchy.
         bone_chain = set_bone.sorting(bone_chain= context.selected_editable_bones)
         
         if not bone_chain:
             self.report({"ERROR"}, f"All Bones are parented, unparent root of the chain.")
             return {"CANCELLED"}
         
-        #creating bones.
+        # Creating bones.
         fk_parents: list = []
         bhandles: list = []
         for bone in bone_chain:
