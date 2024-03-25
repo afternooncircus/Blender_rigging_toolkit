@@ -7,10 +7,11 @@ def assign_widget(bone: PoseBone, shape) -> any:
 
     bone.custom_shape = shape
     bone.custom_shape_rotation_euler[0] = math.radians(90)
-    if bone.name.startswith('strHandle') or bone.name.startswith('endHandle'):
-        bone.custom_shape_scale_xyz = 1.6, 1.6, 1.6
+    if bone.name.startswith('strHandle') or bone.name.startswith('endHandle') or bone.name.startswith('TWK'):
+        bone.custom_shape_scale_xyz = 0.5, 0.5, 0.5
         return {'FINISHED'}
-    bone.custom_shape_scale_xyz = 1.3, 1.3, 1.3
+    bone.custom_shape_scale_xyz = 0.40, 0.40, 0.40
+    bone.use_custom_shape_bone_size = False
 
 
 def collection(bone: EditBone, colname: str, context: Context) -> any:
