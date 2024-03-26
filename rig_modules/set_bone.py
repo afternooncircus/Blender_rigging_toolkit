@@ -2,16 +2,17 @@ from bpy.types import Context, EditBone, PoseBone, BoneCollection
 from pathlib import Path
 import bpy
 import math
+import mathutils
 
 def assign_widget(bone: PoseBone, shape) -> any:         
 
     bone.custom_shape = shape
     bone.custom_shape_rotation_euler[0] = math.radians(90)
+    bone.use_custom_shape_bone_size = False
     if bone.name.startswith('strHandle') or bone.name.startswith('endHandle') or bone.name.startswith('TWK'):
         bone.custom_shape_scale_xyz = 0.5, 0.5, 0.5
         return {'FINISHED'}
     bone.custom_shape_scale_xyz = 0.40, 0.40, 0.40
-    bone.use_custom_shape_bone_size = False
 
 
 def collection(bone: EditBone, colname: str, context: Context) -> any:
@@ -64,16 +65,22 @@ length: float,
 context: Context,
 bone_name: str = '',
 inherir_scale: str = 'AVERAGE',
+align_world = False,
 ) -> EditBone:
     
     if bone_name:
         bname = bone_name
     else:
         bname = naming(bone, bone_type)
+    
+    if not align_world:
+        bone_tail = (bone.vector) + bone.tail
+    else:
+        bone_tail = bone.head + mathutils.Vector((0,0,1))
         
     new_bone: str = context.object.data.edit_bones.new(bname)
     new_bone.head = bone_head
-    new_bone.tail = (bone.vector) + bone.tail
+    new_bone.tail = bone_tail
     new_bone.length = length
     new_bone.roll = bone.roll
     new_bone.bbone_x = bbone_size

@@ -15,7 +15,7 @@ class AC_OT_TorsoChain(Operator):
     ctrlcol = 'Control Torso'
     fkcol = 'FK Torso'
     mchcol = 'Mechanism Chain'
-    fkhinge = True
+    fkhinge = False
     
     @classmethod
     def poll(cls, context: Context) -> bool:
@@ -70,7 +70,8 @@ class AC_OT_TorsoChain(Operator):
                         bbone_size=bone.bbone_x*1.9,
                         length=bone.length*0.12,
                         context=context,
-                        bone_name='COG'
+                        bone_name='COG',
+                        align_world=True,
                     )
                 ctrl_bone = set_bone.create(
                         bone,
@@ -95,8 +96,6 @@ class AC_OT_TorsoChain(Operator):
                 set_bone.collection(bone=twk_bone, colname=self.tweakcol, context=context)
                 set_bone.collection(bone=ctrl_bone, colname=self.ctrlcol, context=context)
                 set_bone.collection(bone=ctrl_cog, colname=self.ctrlcol, context=context)
-
-
 
             # To be only apply on the chain.
             else:
